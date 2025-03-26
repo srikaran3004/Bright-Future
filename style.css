@@ -1598,3 +1598,215 @@ section.blog {
 .course-card.highlight .course-title {
     color: var(--primary-color);
 }
+
+/* Responsive Design Styles */
+@media screen and (max-width: 1200px) {
+    .website-container {
+        width: 95%;
+    }
+    
+    .banner {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .banner-desc {
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+    
+    .banner-img {
+        width: 100%;
+    }
+    
+    .services-contents {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .course-contents {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .main-navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 70px;
+        background-color: var(--primary-clr);
+        padding: 0 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 1000;
+        box-shadow: 0 2px 10px var(--shadow-clr);
+    }
+
+    .main-navbar .logo img {
+        width: 100px;
+        height: auto;
+    }
+
+    .menu-btn {
+        display: block;
+        width: 30px;
+        height: 30px;
+        position: relative;
+        cursor: pointer;
+        z-index: 1001;
+    }
+
+    .menu-btn span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: var(--light-heading-clr);
+        position: absolute;
+        left: 0;
+        transition: all 0.3s ease;
+    }
+
+    .menu-btn span:nth-child(1) {
+        top: 0;
+    }
+
+    .menu-btn span:nth-child(2) {
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .menu-btn span:nth-child(3) {
+        bottom: 0;
+    }
+
+    .menu-btn.active span:nth-child(1) {
+        transform: rotate(45deg);
+        top: 14px;
+    }
+
+    .menu-btn.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-btn.active span:nth-child(3) {
+        transform: rotate(-45deg);
+        bottom: 14px;
+    }
+
+    .nav-list {
+        position: fixed;
+        top: 70px;
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 70px);
+        background-color: var(--bg-clr-1);
+        padding: 2rem 0;
+        transition: all 0.3s ease-in-out;
+        z-index: 1000;
+        overflow-y: auto;
+        box-shadow: 0 4px 10px var(--shadow-clr);
+    }
+
+    .nav-list.active {
+        left: 0;
+    }
+
+    .nav-list li {
+        display: block;
+        margin: 0;
+        padding: 0 1rem;
+    }
+
+    .nav-list li a {
+        display: block;
+        padding: 1rem 0;
+        font-size: 1.1rem;
+        color: var(--dark-heading-clr);
+        border-bottom: 1px solid var(--border-clr);
+    }
+
+    .nav-list li a:hover {
+        color: var(--primary-clr);
+        background-color: var(--bg-clr-2);
+    }
+
+    .nav-list li a::after {
+        display: none;
+    }
+
+    /* Hide desktop theme toggle and nav actions */
+    .theme-switch-container,
+    .nav-actions {
+        display: none;
+    }
+
+    /* Mobile theme toggle button */
+    .mobile-theme-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        background-color: var(--primary-clr);
+        border-radius: 50%;
+        box-shadow: 0 4px 15px var(--shadow-clr);
+        z-index: 1000;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .mobile-theme-toggle i {
+        font-size: 24px;
+        color: var(--light-heading-clr);
+    }
+
+    /* Dark mode specific styles */
+    html.dark-mode .nav-list {
+        background-color: var(--bg-clr-2);
+    }
+
+    html.dark-mode .nav-list li a {
+        color: var(--light-heading-clr);
+        border-bottom-color: var(--border-clr);
+    }
+
+    html.dark-mode .nav-list li a:hover {
+        background-color: var(--bg-clr-3);
+    }
+}
+
+/* Additional mobile optimizations */
+@media screen and (max-width: 480px) {
+    .main-navbar {
+        padding: 0 0.8rem;
+    }
+
+    .main-navbar .logo img {
+        width: 90px;
+    }
+
+    .nav-list {
+        padding: 1.5rem 0;
+    }
+
+    .nav-list li a {
+        padding: 0.8rem 0;
+        font-size: 1rem;
+    }
+
+    .mobile-theme-toggle {
+        width: 50px;
+        height: 50px;
+        bottom: 15px;
+        right: 15px;
+    }
+
+    .mobile-theme-toggle i {
+        font-size: 20px;
+    }
+}

@@ -60,6 +60,12 @@ const lightModeToggle = document.getElementById('light-mode-toggle');
 const darkModeToggle = document.getElementById('dark-mode-toggle');
 const htmlElement = document.documentElement;
 
+// Create and append mobile theme toggle button
+const mobileThemeToggle = document.createElement('div');
+mobileThemeToggle.className = 'mobile-theme-toggle';
+mobileThemeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+document.body.appendChild(mobileThemeToggle);
+
 // Check for saved theme preference or system preference
 function getPreferredTheme() {
     const savedTheme = localStorage.getItem('theme');
@@ -69,6 +75,16 @@ function getPreferredTheme() {
     
     // Check if system prefers dark mode
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+// Update theme toggle icon
+function updateThemeIcon(theme) {
+    const icon = mobileThemeToggle.querySelector('i');
+    if (theme === 'dark') {
+        icon.className = 'fas fa-sun';
+    } else {
+        icon.className = 'fas fa-moon';
+    }
 }
 
 // Apply theme with smooth transition
@@ -84,6 +100,9 @@ function applyTheme(theme) {
             htmlElement.classList.remove('dark-mode');
         }
         
+        // Update theme icon
+        updateThemeIcon(theme);
+        
         // Remove transition class after theme is applied
         setTimeout(() => {
             htmlElement.classList.remove('theme-transition');
@@ -95,7 +114,23 @@ function applyTheme(theme) {
 const preferredTheme = getPreferredTheme();
 applyTheme(preferredTheme);
 
-// Theme toggle event listeners for direct icon clicks
+// Theme toggle event listeners
+function toggleTheme() {
+    const currentTheme = htmlElement.classList.contains('dark-mode') ? 'light' : 'dark';
+    applyTheme(currentTheme);
+    localStorage.setItem('theme', currentTheme);
+    
+    // Add clicked animation
+    mobileThemeToggle.classList.add('clicked');
+    setTimeout(() => {
+        mobileThemeToggle.classList.remove('clicked');
+    }, 500);
+}
+
+// Add click event listener for mobile theme toggle
+mobileThemeToggle.addEventListener('click', toggleTheme);
+
+// Theme toggle event listeners for desktop icons
 if (lightModeToggle) {
     lightModeToggle.addEventListener('click', () => {
         applyTheme('light');
@@ -334,5 +369,60 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Enter') {
             performSearch();
         }
+    });
+});
+
+// Mobile Menu Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const menuBtn = document.querySelector('.main-navbar .menu-btn');
+    const navList = document.querySelector('.main-navbar .nav-list');
+    const body = document.body;
+    
+    if (!menuBtn || !navList) {
+        console.error('Menu button or nav list not found');
+        return;
+    }
+    
+    // Toggle menu
+    menuBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Menu button clicked');
+        this.classList.toggle('active');
+        navList.classList.toggle('active');
+        body.style.overflow = navList.classList.contains('active') ? 'hidden' : '';
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!menuBtn.contains(e.target) && !navList.contains(e.target)) {
+            menuBtn.classList.remove('active');
+            navList.classList.remove('active');
+            body.style.overflow = '';
+        }
+    });
+    
+    // Close menu when clicking on a link
+    const navLinks = document.querySelectorAll('.nav-list a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            menuBtn.classList.remove('active');
+            navList.classList.remove('active');
+            body.style.overflow = '';
+        });
+    });
+    
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            menuBtn.classList.remove('active');
+            navList.classList.remove('active');
+            body.style.overflow = '';
+        }
+    });
+
+    // Prevent menu from closing when clicking inside it
+    navList.addEventListener('click', function(e) {
+        e.stopPropagation();
     });
 }); 

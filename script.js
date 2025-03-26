@@ -288,4 +288,51 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Home') {
         scrollToTop();
     }
+});
+
+// Search functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector('.search-bar input');
+    const searchIcon = document.querySelector('.search-bar i');
+    const courseCards = document.querySelectorAll('.course-card');
+
+    function performSearch() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        
+        // Remove any existing highlight class
+        courseCards.forEach(card => {
+            card.classList.remove('highlight');
+        });
+
+        let foundMatch = false;
+        let firstMatch = null;
+
+        courseCards.forEach(card => {
+            const courseTitle = card.querySelector('.course-title').textContent.toLowerCase();
+            const courseCategory = card.querySelector('.subject h3').textContent.toLowerCase();
+            
+            if (courseTitle.includes(searchTerm) || courseCategory.includes(searchTerm)) {
+                card.classList.add('highlight');
+                foundMatch = true;
+                if (!firstMatch) {
+                    firstMatch = card;
+                }
+            }
+        });
+
+        // If a match is found, scroll to the courses section
+        if (foundMatch && firstMatch) {
+            document.getElementById('courses').scrollIntoView({ behavior: 'smooth' });
+        } else if (searchTerm !== '') {
+            alert('No courses found matching your search.');
+        }
+    }
+
+    // Add event listeners for search
+    searchIcon.addEventListener('click', performSearch);
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
 }); 

@@ -345,29 +345,76 @@ document.addEventListener('DOMContentLoaded', function() {
         courseCards.forEach(card => {
             const courseTitle = card.querySelector('.course-title').textContent.toLowerCase();
             const courseCategory = card.querySelector('.subject h3').textContent.toLowerCase();
+            const courseDesc = card.querySelector('.course-desc').textContent.toLowerCase();
             
-            if (courseTitle.includes(searchTerm) || courseCategory.includes(searchTerm)) {
+            if (courseTitle.includes(searchTerm) || 
+                courseCategory.includes(searchTerm) || 
+                courseDesc.includes(searchTerm)) {
                 card.classList.add('highlight');
                 foundMatch = true;
                 if (!firstMatch) {
                     firstMatch = card;
                 }
+            } else {
+                card.style.display = 'none';
             }
         });
 
+        // Show all cards if search is empty
+        if (searchTerm === '') {
+            courseCards.forEach(card => {
+                card.style.display = 'block';
+            });
+            return;
+        }
+
         // If a match is found, scroll to the courses section
         if (foundMatch && firstMatch) {
-            document.getElementById('courses').scrollIntoView({ behavior: 'smooth' });
-        } else if (searchTerm !== '') {
-            alert('No courses found matching your search.');
+            document.getElementById('courses').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        } else {
+            // Show no results message
+            const coursesSection = document.getElementById('courses');
+            let noResultsMsg = coursesSection.querySelector('.no-results');
+            
+            if (!noResultsMsg) {
+                noResultsMsg = document.createElement('div');
+                noResultsMsg.className = 'no-results';
+                noResultsMsg.style.textAlign = 'center';
+                noResultsMsg.style.padding = '20px';
+                noResultsMsg.style.color = 'var(--dark-text-clr)';
+                coursesSection.appendChild(noResultsMsg);
+            }
+            
+            noResultsMsg.textContent = `No courses found matching "${searchTerm}"`;
         }
     }
 
     // Add event listeners for search
     searchIcon.addEventListener('click', performSearch);
-    searchInput.addEventListener('keypress', function(e) {
+    
+    // Update the keypress event listener to use keydown instead
+    searchInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
+            e.preventDefault(); // Prevent form submission if any
             performSearch();
+        }
+    });
+
+    // Clear search when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !searchIcon.contains(e.target)) {
+            searchInput.value = '';
+            courseCards.forEach(card => {
+                card.style.display = 'block';
+                card.classList.remove('highlight');
+            });
+            const noResultsMsg = document.querySelector('.no-results');
+            if (noResultsMsg) {
+                noResultsMsg.remove();
+            }
         }
     });
 });
